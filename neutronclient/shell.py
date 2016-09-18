@@ -48,6 +48,7 @@ from neutronclient.neutron.v2_0 import availability_zone
 from neutronclient.neutron.v2_0.bgp import dragentscheduler as bgp_drsched
 from neutronclient.neutron.v2_0.bgp import peer as bgp_peer
 from neutronclient.neutron.v2_0.bgp import speaker as bgp_speaker
+from neutronclient.neutron.v2_0.bgp import vrf as bgp_vrf
 from neutronclient.neutron.v2_0 import extension
 from neutronclient.neutron.v2_0.flavor import flavor
 from neutronclient.neutron.v2_0.flavor import flavor_profile
@@ -442,6 +443,13 @@ COMMAND_V2 = {
     'bgp-peer-create': bgp_peer.CreatePeer,
     'bgp-peer-update': bgp_peer.UpdatePeer,
     'bgp-peer-delete': bgp_peer.DeletePeer,
+    'bgp-vrf-create': bgp_vrf.CreateVRF,
+    'bgp-vrf-update': bgp_vrf.UpdateVRF,
+    'bgp-vrf-delete': bgp_vrf.DeleteVRF,
+    'bgp-vrf-list': bgp_vrf.ListVRF,
+    'bgp-vrf-show': bgp_vrf.ShowVRF,
+    'bgp-vrf-router-associate': bgp_vrf.AssociateVRFRouter,
+    'bgp-vrf-router-disassociate': bgp_vrf.DisassociateVRFRouter,
     'net-ip-availability-list': network_ip_availability.ListIpAvailability,
     'net-ip-availability-show': network_ip_availability.ShowIpAvailability,
     'tag-add': tag.AddTag,

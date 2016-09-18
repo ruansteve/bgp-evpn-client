@@ -613,6 +613,8 @@ class Client(ClientBase):
     bgp_speaker_path = "/bgp-speakers/%s"
     bgp_peers_path = "/bgp-peers"
     bgp_peer_path = "/bgp-peers/%s"
+    bgp_vrfs_path = "/vrfs"
+    bgp_vrf_path = "/vrfs/%s"
     network_ip_availabilities_path = '/network-ip-availabilities'
     network_ip_availability_path = '/network-ip-availabilities/%s'
     tags_path = "/%s/%s/tags"
@@ -666,6 +668,7 @@ class Client(ClientBase):
                      'flavors': 'flavor',
                      'bgp_speakers': 'bgp_speaker',
                      'bgp_peers': 'bgp_peer',
+                     'vrfs': 'vrf',
                      'network_ip_availabilities': 'network_ip_availability',
                      'trunks': 'trunk',
                      }
@@ -1880,6 +1883,37 @@ class Client(ClientBase):
     def delete_bgp_peer(self, peer_id):
         """Deletes the specified BGP peer."""
         return self.delete(self.bgp_peer_path % peer_id)
+
+    def list_vrfs(self, **_params):
+        """Fetches a list of all BGP peers."""
+        return self.get(self.bgp_vrfs_path, params=_params)
+
+    def show_vrf(self, vrf_id, **_params):
+        """Fetches information of a certain BGP peer."""
+        return self.get(self.bgp_vrf_path % vrf_id,
+                        params=_params)
+
+    def create_vrf(self, body=None):
+        """Create a new BGP VRF."""
+        return self.post(self.bgp_vrfs_path, body=body)
+
+    def update_vrf(self, vrf_id, body=None):
+        """Update a BGP peer."""
+        return self.put(self.bgp_vrf_path % vrf_id, body=body)
+
+    def delete_vrf(self, vrf_id):
+        """Deletes the specified BGP peer."""
+        return self.delete(self.bgp_vrf_path % vrf_id)
+
+    def add_vrf_router_association(self, vrf_id, body=None):
+        """Associate a VRF to router."""
+        return self.put((self.bgp_vrf_path % vrf_id) +
+                        "/add_vrf_router_assoc", body=body)
+
+    def remove_vrf_router_association(self, vrf_id, body=None):
+        """Delete a VRF router association."""
+        return self.put((self.bgp_vrf_path % vrf_id) +
+                        "/remove_vrf_router_assoc", body=body)
 
     def list_network_ip_availabilities(self, retrieve_all=True, **_params):
         """Fetches IP availibility information for all networks"""
