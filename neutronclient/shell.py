@@ -438,6 +438,8 @@ COMMAND_V2 = {
     'bgp-speaker-peer-remove': bgp_speaker.RemovePeerFromSpeaker,
     'bgp-speaker-network-add': bgp_speaker.AddNetworkToSpeaker,
     'bgp-speaker-network-remove': bgp_speaker.RemoveNetworkFromSpeaker,
+    'bgp-speaker-vrf-add': bgp_vrf.AddVrfToSpeaker,
+    'bgp-speaker-vrf-remove': bgp_vrf.RemoveVrfFromSpeaker,
     'bgp-peer-list': bgp_peer.ListPeers,
     'bgp-peer-show': bgp_peer.ShowPeer,
     'bgp-peer-create': bgp_peer.CreatePeer,

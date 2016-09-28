@@ -119,6 +119,10 @@ def _get_router_id(client, name_or_id):
         client, 'router', name_or_id)
 
 
+def _get_bgp_speaker_id(client, id_or_name):
+    return neutronv20.find_resourceid_by_name_or_id(client,
+                                                    'bgp_speaker',
+                                                    id_or_name)
 # VRF Router associations
 
 
@@ -145,6 +149,9 @@ class AssociateVRFRouter(neutronv20.NeutronCommand):
                                     parsed_args.router)
         neutron_client.add_vrf_router_association(_vrf_id,
                                                   {'router_id': _router_id})
+        print(_('Associated VRF %(vrf)s to Router %(router)s.') %
+              {'vrf': parsed_args.vrf, 'router': parsed_args.router},
+              file=self.app.stdout)
 
 
 class DisassociateVRFRouter(neutronv20.NeutronCommand):
@@ -169,3 +176,62 @@ class DisassociateVRFRouter(neutronv20.NeutronCommand):
                                     parsed_args.router)
         neutron_client.remove_vrf_router_association(_vrf_id,
                                                      {'router_id': _router_id})
+        print(_('Disassociated VRF %(vrf)s from Router %(router)s.') %
+              {'vrf': parsed_args.vrf, 'router': parsed_args.router},
+              file=self.app.stdout)
+
+
+class AddVrfToSpeaker(neutronv20.NeutronCommand):
+    """Add a VRF to the BGP speaker."""
+
+    def get_parser(self, prog_name):
+        parser = super(AddVrfToSpeaker, self).get_parser(prog_name)
+        parser.add_argument(
+            'bgp_speaker',
+            metavar='BGP_SPEAKER',
+            help=_('ID or name of the BGP speaker.'))
+        parser.add_argument(
+            'vrf',
+            metavar='VRF',
+            help=_('ID or name of the VRF defined by bgp-vrf-create.'))
+        return parser
+
+    def take_action(self, parsed_args):
+        neutron_client = self.get_client()
+        _speaker_id = _get_bgp_speaker_id(neutron_client,
+                                         parsed_args.bgp_speaker)
+        _vrf_id = _get_vrf_id(neutron_client,
+                             parsed_args.vrf)
+        neutron_client.add_vrf_speaker_association(_vrf_id,
+                                              {'speaker_id': _speaker_id})
+        print(_('Added VRF %(vrf)s to BGP speaker %(speaker)s.') %
+              {'vrf': parsed_args.vrf, 'speaker': parsed_args.bgp_speaker},
+              file=self.app.stdout)
+
+
+class RemoveVrfFromSpeaker(neutronv20.NeutronCommand):
+    """Remove a VRF from the BGP speaker."""
+
+    def get_parser(self, prog_name):
+        parser = super(RemoveVrfFromSpeaker, self).get_parser(prog_name)
+        parser.add_argument(
+            'bgp_speaker',
+            metavar='BGP_SPEAKER',
+            help=_('ID or name of the BGP speaker.'))
+        parser.add_argument(
+            'vrf',
+            metavar='VRF',
+            help=_('ID or name of the VRF to remove.'))
+        return parser
+
+    def take_action(self, parsed_args):
+        neutron_client = self.get_client()
+        _speaker_id = _get_bgp_speaker_id(neutron_client,
+                                         parsed_args.bgp_speaker)
+        _vrf_id = _get_vrf_id(neutron_client,
+                             parsed_args.vrf)
+        neutron_client.remove_vrf_speaker_association(_vrf_id,
+                                                   {'speaker_id': _speaker_id})
+        print(_('Removed VRF %(vrf)s from BGP speaker %(speaker)s.') %
+              {'vrf': parsed_args.vrf, 'speaker': parsed_args.bgp_speaker},
+              file=self.app.stdout)

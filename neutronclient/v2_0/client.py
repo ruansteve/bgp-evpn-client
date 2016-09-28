@@ -1914,6 +1914,15 @@ class Client(ClientBase):
         """Delete a VRF router association."""
         return self.put((self.bgp_vrf_path % vrf_id) +
                         "/remove_vrf_router_assoc", body=body)
+    def add_vrf_speaker_association(self, vrf_id, body=None):
+        """Associate a VRF to speaker."""
+        return self.put((self.bgp_vrf_path % vrf_id) +
+                        "/add_vrf_speaker_assoc", body=body)
+
+    def remove_vrf_speaker_association(self, vrf_id, body=None):
+        """Delete a VRF speaker association.."""
+        return self.put((self.bgp_vrf_path % vrf_id) +
+                        "/remove_vrf_speaker_assoc", body=body)
 
     def list_network_ip_availabilities(self, retrieve_all=True, **_params):
         """Fetches IP availibility information for all networks"""
