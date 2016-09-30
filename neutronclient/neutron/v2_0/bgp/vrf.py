@@ -25,9 +25,6 @@ from neutronclient.neutron import v2_0 as neutronv20
 def add_common_args(parser):
     """Adds to parser arguments common to create and update commands."""
     parser.add_argument(
-        '--name',
-        help=_('Name of the BGP VRF.'))
-    parser.add_argument(
         '--import-targets',
         help=_('List of additional Route Targets to import from.'
                ' Usage: -- --import-targets list=true '
@@ -54,11 +51,15 @@ def args2body_common_args(body, parsed_args):
 
 
 class CreateVRF(neutronv20.CreateCommand):
-    """Create a VRF."""
+    """Create a BGP VRF."""
     resource = 'vrf'
 
     def add_known_arguments(self, parser):
         # type is read-only, hence specific to create
+        parser.add_argument(
+            'name',
+            metavar='Name',
+            help=_('Name of the BGP VRF.'))
         parser.add_argument(
             '--type',
             default='evpn',
